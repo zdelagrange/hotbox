@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "encoding/json"
+	"encoding/json"
 
 	"fmt"
 	"log"
@@ -11,17 +11,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// var (
-// 	pin           int
-// 	stype         string
-// 	boostPerfFlag bool
-// )
-
-// func init() {
-// 	flag.IntVar(&pin, "pin", 4, "pin")
-// 	flag.StringVar(&stype, "sensor-type", "dht22", "sensor type (dht22)")
-// 	flag.BoolVar(&boostPerfFlag, "boost", false, "boost performance")
-// }
+var state = map[string]float32{
+	"temperature": 0,
+	"humidity":    0,
+}
 
 // Root does Root
 func Root(w http.ResponseWriter, r *http.Request) {
@@ -29,15 +22,53 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// temperature64 := float64(temperature)
-	// humidity64 := float64(humidity)
 	fmt.Fprintf(w, `temp: %v\nhumidity: %v\nreried: %v`, temperature, humidity, retried)
+}
+
+// SensorState set and get state
+func SensorState() map[string]float32 {
+	temperature, humidity, _, err := dht.ReadDHTxxWithRetry(dht.DHT22, 4, false, 10)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	state["temperature"] = temperature
+	state["humidity"] = humidity
+	return (state)
+}
+
+// Humidity blah
+func Humidity(w http.ResponseWriter, r *http.Request) {
+	SensorState()
+
+	payload, err := json.Marshal(state)
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(payload)
+}
+
+// Temperature temp
+func Temperature(w http.ResponseWriter, r *http.Request) {
+	SensorState()
+
+	payload, err := json.Marshal(state)
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(payload)
 }
 
 func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", Root).Methods("GET")
+	router.HandleFunc("/api/humidity", Humidity).Methods("GET")
+	router.HandleFunc("/api/temperature", Temperature).Methods("GET")
 
 	log.Fatal(http.ListenAndServe("0.0.0.0:3000", router))
 }
