@@ -9,6 +9,7 @@ import (
 
 	"github.com/d2r2/go-dht"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 var state = map[string]float32{
@@ -73,10 +74,16 @@ func Temperature(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := mux.NewRouter()
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+	})
 
 	router.HandleFunc("/", Root).Methods("GET")
 	router.HandleFunc("/api/humidity", Humidity).Methods("GET")
 	router.HandleFunc("/api/temperature", Temperature).Methods("GET")
 
-	log.Fatal(http.ListenAndServe("0.0.0.0:3000", router))
+	handler := c.Handler(router)
+
+	log.Fatal(http.ListenAndServe("0.0.0.0:3000", handler))
 }
