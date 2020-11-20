@@ -41,7 +41,11 @@ func SensorState() map[string]float32 {
 func Humidity(w http.ResponseWriter, r *http.Request) {
 	SensorState()
 
-	payload, err := json.Marshal(state)
+	humidity := map[string]int{
+		"humidity": state["humidity"]
+	}
+
+	payload, err := json.Marshal(temperature)
 	if err != nil {
 		log.Println(err)
 	}
@@ -53,6 +57,10 @@ func Humidity(w http.ResponseWriter, r *http.Request) {
 // Temperature temp
 func Temperature(w http.ResponseWriter, r *http.Request) {
 	SensorState()
+
+	temperature := map[string]int{
+		"temperature": state["temperature"]
+	}
 
 	payload, err := json.Marshal(state)
 	if err != nil {
