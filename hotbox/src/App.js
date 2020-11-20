@@ -4,10 +4,7 @@ import Temperature from "./components/Temperature"
 function App() {
   return (
     <div>
-      <Temperature
-        desiredScale='f'
-        givenScale='c'
-		/>
+      <Temperature />
     </div>
   );
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"time"
 
 	"fmt"
 	"log"
@@ -16,6 +17,8 @@ var state = map[string]float32{
 	"temperature": 0,
 	"humidity":    0,
 }
+
+var lastUpdate = time.Now()
 
 // Root does Root
 func Root(w http.ResponseWriter, r *http.Request) {
@@ -33,8 +36,16 @@ func SensorState() map[string]float32 {
 		log.Fatal(err)
 	}
 
-	state["temperature"] = temperature
-	state["humidity"] = humidity
+	newTime := time.Now()
+	diff := newTime.Sub(lastUpdate).Seconds
+	log.Println(diff)
+
+	if newTime.Sub(lastUpdate).Seconds() > 10 {
+		lastUpdate = newTime
+		state["temperature"] = temperature
+		state["humidity"] = humidity
+	}
+
 	return (state)
 }
 
@@ -75,8 +86,7 @@ func Temperature(w http.ResponseWriter, r *http.Request) {
 func main() {
 	router := mux.NewRouter()
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
-		AllowCredentials: true,
+		AllowedOrigins: []string{"http://localhost:3000"},
 	})
 
 	router.HandleFunc("/", Root).Methods("GET")
