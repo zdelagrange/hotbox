@@ -1,6 +1,5 @@
-CREATE TABLE 'reading' (
-    `uid` INTEGER PRIMARY KEY AUTOINCREMENT,
-    `datetime` TEXT,
-    `temperature` REAL,
-    `humidity` REAL,
-)
+CREATE TABLE reading (
+    datetime text,
+    temperature real,
+    humidity real
+);
