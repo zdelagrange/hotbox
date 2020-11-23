@@ -19,6 +19,7 @@ func Reading(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := db.Query("SELECT temperature, humidity FROM reading ORDER BY rowid DESC LIMIT 1;")
 	checkErr(err)
+	defer rows.Close()
 
 	var temperature, humidity float32
 	if rows.Next() {
