@@ -32,7 +32,6 @@ func Root(w http.ResponseWriter, r *http.Request) {
 // SensorState set and get state
 func SensorState() map[string]float32 {
 	newTime := time.Now()
-	diff := newTime.Sub(lastUpdate).Seconds
 
 	if newTime.Sub(lastUpdate).Seconds() > 10 {
 		temperature, humidity, _, err := dht.ReadDHTxxWithRetry(dht.DHT22, 4, false, 10)
