@@ -1,10 +1,10 @@
 import './App.css';
-import Temperature from "./components/Temperature"
+import Reading from "./components/Reading"
 
 function App() {
   return (
     <div>
-      <Temperature />
+      <Reading />
     </div>
   );
 }
