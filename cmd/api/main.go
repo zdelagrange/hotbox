@@ -20,7 +20,7 @@ type reading struct {
 // Reading GET latest reading
 func Reading(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	r.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	db, err := sql.Open("sqlite3", "./hotbox.db")
 	checkErr(err)
 	newReading := reading{}
