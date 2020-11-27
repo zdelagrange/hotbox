@@ -1,7 +1,7 @@
 FROM golang AS build
 
 WORKDIR /go/hotbox
-COPY ./cmd /go/hotbox
-COPY ./scripts /go/hotbox
+COPY ./cmd /go/hotbox/cmd
+COPY ./scripts /go/hotbox/scripts
 RUN "./scripts/build.sh"
 ENTRYPOINT [ "./scripts/start.sh" ]
