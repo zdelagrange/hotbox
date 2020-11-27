@@ -19,8 +19,6 @@ type reading struct {
 
 // Reading GET latest reading
 func Reading(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	db, err := sql.Open("sqlite3", "./hotbox.db")
 	checkErr(err)
 	newReading := reading{}
@@ -67,7 +65,7 @@ func checkErr(err error) {
 func main() {
 	router := mux.NewRouter()
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins: []string{"http://localhost:3000"},
 	})
 
 	router.HandleFunc("/api/reading", Reading).Methods("GET", "POST")
