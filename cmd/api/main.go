@@ -65,7 +65,7 @@ func checkErr(err error) {
 func main() {
 	router := mux.NewRouter()
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:3000"},
+		AllowedOrigins: []string{"*"},
 	})
 
 	router.HandleFunc("/api/reading", Reading).Methods("GET", "POST")
