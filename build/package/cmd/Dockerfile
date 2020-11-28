@@ -1,4 +1,4 @@
-FROM arm32v7/golang AS build
+FROM golang AS build
 
 WORKDIR /go/hotbox
 COPY ./cmd /go/hotbox/cmd
