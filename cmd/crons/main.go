@@ -1,37 +1,40 @@
 package main
 
 import (
-	"database/sql"
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/d2r2/go-dht"
 	_ "github.com/mattn/go-sqlite3"
 )
 
+type reading struct {
+	Temperature float32
+	Humidity    float32
+}
+
 func UpdateSensorRow() {
+	var newReading reading
 	for {
 		time.Sleep(60 * time.Second)
 
-		db, err := sql.Open("sqlite3", "./hotbox.db")
-		checkErr(err)
-
-		stmt, err := db.Prepare("INSERT INTO reading(datetime, temperature, humidity) values(datetime('now'),?,?)")
-		checkErr(err)
-
 		temperature, humidity, _, err := dht.ReadDHTxxWithRetry(dht.DHT22, 4, false, 10)
-		_, err = stmt.Exec(temperature, humidity)
 		checkErr(err)
-		// var reading = map[string]float32{
-		// 	"temperature": temperature,
-		// 	"humidity":    humidity,
-		// }
-		// payload, err := json.Marshal(reading)
-		// checkErr(err)
+		newReading.Humidity = humidity
+		newReading.Temperature = temperature
+		payload, err := json.Marshal(newReading)
+		checkErr(err)
 
-		// send request to post api
-		// resp, err := http.Post("http://localhost:3000", "application/json", bytes.NewBuffer(payload))
-		// checkErr(err)
+		resp, err := http.Post("http://localhost:3000", "application/json", bytes.NewBuffer(payload))
+		if resp.StatusCode != 200 {
+			payload, _ := ioutil.ReadAll(resp.Request.Body)
+			log.Printf("Request Failed: Status Code {%d} | Request URL {%s} | Request Payload {%s}", resp.StatusCode, resp.Request.URL, payload)
+		}
+		checkErr(err)
 	}
 }
 

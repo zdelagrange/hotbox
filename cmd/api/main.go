@@ -21,7 +21,7 @@ type reading struct {
 func Reading(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./hotbox.db")
 	checkErr(err)
-	newReading := reading{}
+	var newReading reading
 
 	if r.Method == "GET" {
 		rows, err := db.Query("SELECT temperature, humidity FROM reading ORDER BY rowid DESC LIMIT 1;")
@@ -41,17 +41,12 @@ func Reading(w http.ResponseWriter, r *http.Request) {
 		w.Write(payload)
 	}
 	if r.Method == "POST" {
-		//write new reading
-		var NewNewReading reading
-		// body, err := ioutil.ReadAll(r.Body)
-		// checkErr(err)
-		// err = json.Unmarshal(body, %NewNewReading)
 		decoder := json.NewDecoder(r.Body)
-		err = decoder.Decode(&NewNewReading)
+		err = decoder.Decode(&newReading)
 		checkErr(err)
 		stmt, err := db.Prepare("INSERT INTO reading(datetime, temperature, humidity) values(datetime('now'),?,?)")
 		checkErr(err)
-		_, err = stmt.Exec(NewNewReading.Temperature, NewNewReading.Humidity)
+		_, err = stmt.Exec(newReading.Temperature, newReading.Humidity)
 		checkErr(err)
 	}
 }
