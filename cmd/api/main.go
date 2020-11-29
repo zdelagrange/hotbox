@@ -111,7 +111,7 @@ func Readings(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./hotbox.db")
 	checkErr(err)
 
-	rows, err := db.Query(fmt.Sprintf("SELECT humidity, temperature FROM reading WHERE datetime > '%s';", now.String()))
+	rows, err := db.Query(fmt.Sprintf("SELECT humidity, temperature FROM reading WHERE datetime > '%s';", now.Format("2006-01-02 15:04:05")))
 	checkErr(err)
 	defer rows.Close()
 	for rows.Next() {
