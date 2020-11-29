@@ -57,51 +57,51 @@ func Reading(w http.ResponseWriter, r *http.Request) {
 
 // Readings GET range of readings
 func Readings(w http.ResponseWriter, r *http.Request) {
-	var idays int
-	var ihours int
-	var iminutes int
-	var iseconds int
+	// var idays int
+	// var ihours int
+	// var iminutes int
+	// var iseconds int
 	now := time.Now()
 
-	query := r.URL.Query()
-	negativeSign := "-"
-	negativeSign = string(negativeSign)
-	days, ok := query["days"]
-	if !ok || len(days) < 1 {
-		http.Error(w, "malformed url", http.StatusBadRequest)
-	} else if len(days) > 0 {
-		idays = convertQueryString(days)
-	} else {
-		idays = 1
-	}
-	now.AddDate(0, 0, idays)
-	hours, ok := query["hours"]
-	if !ok {
-		http.Error(w, "malformed url", http.StatusBadRequest)
-	} else if len(hours) > 0 {
-		ihours = convertQueryString(hours)
-	} else {
-		ihours = 0
-	}
-	now.Add(time.Duration(ihours))
-	minutes, ok := query["minutes"]
-	if !ok {
-		http.Error(w, "malformed url", http.StatusBadRequest)
-	} else if len(minutes) > 0 {
-		iminutes = convertQueryString(minutes)
-	} else {
-		iminutes = 0
-	}
-	now.Add(time.Duration(iminutes))
-	seconds, ok := query["seconds"]
-	if !ok || len(seconds) < 1 {
-		http.Error(w, "malformed url", http.StatusBadRequest)
-	} else if len(seconds) > 0 {
-		iseconds = convertQueryString(seconds)
-	} else {
-		iseconds = 0
-	}
-	now.Add(time.Duration(iseconds))
+	// query := r.URL.Query()
+	// days, ok := query["days"]
+	// if !ok || len(days) < 1 {
+	// 	http.Error(w, "malformed url", http.StatusBadRequest)
+	// } else if len(days) > 0 {
+	// 	idays = convertQueryString(days)
+	// } else {
+	// 	idays = 1
+	// }
+	// now.AddDate(0, 0, idays)
+	// hours, ok := query["hours"]
+	// if !ok {
+	// 	http.Error(w, "malformed url", http.StatusBadRequest)
+	// } else if len(hours) > 0 {
+	// 	ihours = convertQueryString(hours)
+	// } else {
+	// 	ihours = 0
+	// }
+	// now.Add(time.Duration(ihours))
+	// minutes, ok := query["minutes"]
+	// if !ok {
+	// 	http.Error(w, "malformed url", http.StatusBadRequest)
+	// } else if len(minutes) > 0 {
+	// 	iminutes = convertQueryString(minutes)
+	// } else {
+	// 	iminutes = 0
+	// }
+	// now.Add(time.Duration(iminutes))
+	// seconds, ok := query["seconds"]
+	// if !ok || len(seconds) < 1 {
+	// 	http.Error(w, "malformed url", http.StatusBadRequest)
+	// } else if len(seconds) > 0 {
+	// 	iseconds = convertQueryString(seconds)
+	// } else {
+	// 	iseconds = 0
+	// }
+	// now.Add(time.Duration(iseconds))
+
+	now.AddDate(0, 0, -1)
 
 	var (
 		humidity    string
