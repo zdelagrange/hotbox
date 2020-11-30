@@ -1,8 +1,8 @@
 import React from 'react';
 import { LineChart, XAxis, YAxis, CartesianGrid, Line } from 'recharts';
 
-export default class Linechart extends React.Component {
-    constructor(props) {
+export default class Linechart extends React.Component<{}, { error: any, isLoaded: boolean, reading: any }> {
+    constructor(props: any) {
         super(props);
         this.state = {
             error: null,
@@ -22,7 +22,7 @@ export default class Linechart extends React.Component {
                 (result) => {
                     var newResults = []
                     for (var i = 0; i < result.length; i += 5) {
-                        var newResult = {"Temperature": this.cToF(result[i]['Temperature'])}
+                        var newResult = { "Temperature": this.cToF(result[i]['Temperature']), "Humidity": result[i]["Humidity"] }
                         newResults.push(newResult);
                     }
                     this.setState({
@@ -42,7 +42,7 @@ export default class Linechart extends React.Component {
             )
     }
 
-    cToF(temp) {
+    cToF(temp: number) {
         return temp * 9 / 5 + 32;
     }
 
@@ -54,12 +54,20 @@ export default class Linechart extends React.Component {
             return <div>Loading...</div>;
         } else {
             return (
-                <LineChart width={500} height={300} data={reading}>
-                    <XAxis dataKey="name" />
-                    <YAxis domain={[50, 90]} />
-                    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                    <Line type="monotone" dataKey="Temperature" stroke="#8884d8" />
-                </LineChart>
+                <div>
+                    <LineChart width={500} height={300} data={reading}>
+                        <XAxis dataKey="name" />
+                        <YAxis domain={[50, 90]} />
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                        <Line type="monotone" dataKey="Temperature" stroke="#8884d8" />
+                    </LineChart>
+                    <LineChart width={500} height={300} data={reading}>
+                        <XAxis dataKey="name" />
+                        <YAxis domain={[0, 100]} />
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                        <Line type="monotone" dataKey="Humidity" stroke="#8884d8" />
+                    </LineChart>
+                </div>
             );
         }
     }

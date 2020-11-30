@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default class Reading extends React.Component {
-    constructor(props) {
+export default class Reading extends React.Component<{}, { error: any, isLoaded: boolean, reading: any }> {
+    constructor(props: any) {
         super(props);
         this.state = {
             error: null,
@@ -12,7 +12,7 @@ export default class Reading extends React.Component {
 
     componentDidMount() {
         this.pollApi()
-        this.timer = setInterval(()=> this.pollApi(), 10000);
+        setInterval(()=> this.pollApi(), 10000);
     }
 
     pollApi() {
@@ -37,7 +37,7 @@ export default class Reading extends React.Component {
             )
     }
 
-    cToF(temp) {
+    cToF(temp: number) {
         return temp * 9 / 5 + 32;
     }
 
