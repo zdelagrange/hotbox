@@ -29,7 +29,7 @@ func UpdateSensorRow() {
 		payload, err := json.Marshal(newReading)
 		checkErr(err)
 
-		resp, err := http.Post("http://localhost:3000", "application/json", bytes.NewBuffer(payload))
+		resp, err := http.Post("http://localhost:3000/api/reading", "application/json", bytes.NewBuffer(payload))
 		if resp.StatusCode != 200 {
 			payload, _ := ioutil.ReadAll(resp.Request.Body)
 			log.Printf("Request Failed: Status Code {%d} | Request URL {%s} | Request Payload {%s}", resp.StatusCode, resp.Request.URL, payload)

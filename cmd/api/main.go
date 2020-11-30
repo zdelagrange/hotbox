@@ -111,7 +111,9 @@ func Readings(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./hotbox.db")
 	checkErr(err)
 
-	rows, err := db.Query(fmt.Sprintf("SELECT humidity, temperature FROM reading WHERE datetime > '%s';", now.Format("2006-01-02 15:04:05")))
+	query := fmt.Sprintf("SELECT humidity, temperature FROM reading WHERE datetime > '%s';", now.Format("2006-01-02 15:04:05"))
+	log.Printf(query)
+	rows, err := db.Query(query)
 	checkErr(err)
 	defer rows.Close()
 	for rows.Next() {
@@ -139,7 +141,7 @@ func convertQueryString(original []string) int {
 
 func checkErr(err error) {
 	if err != nil {
-		log.Fatal(err)
+		log.Printf(err)
 	}
 }
 
