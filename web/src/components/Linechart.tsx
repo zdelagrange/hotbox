@@ -1,7 +1,8 @@
 import React from 'react';
+import { LineChart, XAxis, YAxis, CartesianGrid, Line } from 'recharts';
 
-export default class Reading extends React.Component {
-    constructor(props) {
+export default class Linechart extends React.Component<{}, { error: any, isLoaded: boolean, reading: any }> {
+    constructor(props: any) {
         super(props);
         this.state = {
             error: null,
@@ -12,17 +13,21 @@ export default class Reading extends React.Component {
 
     componentDidMount() {
         this.pollApi()
-        this.timer = setInterval(()=> this.pollApi(), 10000);
     }
 
     pollApi() {
-        fetch("http://ratatoskr:3000/api/reading")
+        fetch("http://ratatoskr:3000/api/readings")
             .then(res => res.json())
             .then(
                 (result) => {
+                    var newResults = []
+                    for (var i = 0; i < result.length; i += 5) {
+                        var newResult = {"Temperature": this.cToF(result[i]['Temperature'])}
+                        newResults.push(newResult);
+                    }
                     this.setState({
                         isLoaded: true,
-                        reading: result
+                        reading: newResults
                     });
                 },
                 // Note: it's important to handle errors here
@@ -37,7 +42,7 @@ export default class Reading extends React.Component {
             )
     }
 
-    cToF(temp) {
+    cToF(temp: number) {
         return temp * 9 / 5 + 32;
     }
 
@@ -49,10 +54,12 @@ export default class Reading extends React.Component {
             return <div>Loading...</div>;
         } else {
             return (
-                <ul>
-                    <li>{reading['Humidity']}</li>
-                    <li>{this.cToF(reading['Temperature'])}</li>
-                </ul>
+                <LineChart width={500} height={300} data={reading}>
+                    <XAxis dataKey="name" />
+                    <YAxis domain={[50, 90]} />
+                    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                    <Line type="monotone" dataKey="Temperature" stroke="#8884d8" />
+                </LineChart>
             );
         }
     }
