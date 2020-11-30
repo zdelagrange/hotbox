@@ -101,7 +101,7 @@ func Readings(w http.ResponseWriter, r *http.Request) {
 	// }
 	// now.Add(time.Duration(iseconds))
 
-	now.AddDate(0, 0, -1)
+	yesterday := now.AddDate(0, 0, -1)
 
 	var (
 		humidity    string
@@ -111,7 +111,7 @@ func Readings(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./hotbox.db")
 	checkErr(err)
 
-	query := fmt.Sprintf("SELECT humidity, temperature FROM reading WHERE datetime > '%s';", now.Format("2006-01-02 15:04:05"))
+	query := fmt.Sprintf("SELECT humidity, temperature FROM reading WHERE datetime > '%s';", yesterday.Format("2006-01-02 15:04:05"))
 	log.Printf(query)
 	rows, err := db.Query(query)
 	checkErr(err)

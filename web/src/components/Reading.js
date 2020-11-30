@@ -56,7 +56,7 @@ export default class Reading extends React.Component {
             return (
                 <ul>
                     <li>{reading['Humidity']}</li>
-                    <li>{this.cToF(reading.['Temperature'])}</li>
+                    <li>{this.cToF(reading['Temperature'])}</li>
                 </ul>
             );
         }
