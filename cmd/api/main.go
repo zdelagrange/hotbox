@@ -141,7 +141,7 @@ func convertQueryString(original []string) int {
 
 func checkErr(err error) {
 	if err != nil {
-		log.Printf(err)
+		log.Println(err)
 	}
 }
 
