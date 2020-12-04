@@ -12,7 +12,7 @@ export default class Reading extends React.Component<{}, { error: any, isLoaded:
 
     componentDidMount() {
         this.pollApi()
-        setInterval(()=> this.pollApi(), 10000);
+        setInterval(() => this.pollApi(), 10000);
     }
 
     pollApi() {
@@ -49,10 +49,10 @@ export default class Reading extends React.Component<{}, { error: any, isLoaded:
             return <div>Loading...</div>;
         } else {
             return (
-                <ul>
-                    <li>{reading['Humidity']}</li>
-                    <li>{this.cToF(reading['Temperature'])}</li>
-                </ul>
+                <div>
+                    <span style={{ marginLeft: '.5rem', marginRight: '.5rem' }} >Humidity: {reading['Humidity']}</span>
+                    <span style={{ marginLeft: '.5rem', marginRight: '.5rem' }} >Temperature: {this.cToF(reading['Temperature'])}F</span>
+                </div>
             );
         }
     }
