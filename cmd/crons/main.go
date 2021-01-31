@@ -17,11 +17,10 @@ type reading struct {
 	Humidity    float32
 }
 
+// UpdateSensorRow doc
 func UpdateSensorRow() {
 	var newReading reading
-	for {
-		time.Sleep(60 * time.Second)
-
+	for range time.Tick(time.Minute) {
 		temperature, humidity, _, err := dht.ReadDHTxxWithRetry(dht.DHT22, 4, false, 10)
 		checkErr(err)
 		newReading.Humidity = humidity
@@ -40,7 +39,7 @@ func UpdateSensorRow() {
 
 func checkErr(err error) {
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 }
 
